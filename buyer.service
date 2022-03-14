@@ -1,0 +1,13 @@
+[Unit]
+Description=Scheduled bitcoin buyer
+
+[Service]
+EnvironmentFile=/etc/buyer.env
+ExecStart=/usr/local/bin/buyer
+Type=simple
+User=buyer
+Group=buyer
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
