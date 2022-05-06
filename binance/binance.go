@@ -3,6 +3,8 @@ package binance
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -67,6 +69,12 @@ func (b *Binance) doRequest(method, path string, values url.Values, sign bool) (
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return []byte{}, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		var response errorResponse
+		json.Unmarshal(body, &response)
+		return []byte{}, errors.New(response.Msg)
 	}
 
 	return body, nil
